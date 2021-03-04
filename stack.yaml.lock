@@ -3,11 +3,38 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: hip-1.5.6.0@sha256:296c55622f62485422c0a593c7306af1a5abf8ba9f866dcdffc281b01eba65d7,6988
+    pantry-tree:
+      size: 7456
+      sha256: d79395e6ec9caf1132a7e001f6fe9b8ebada31e0e52087a4a1a971e3f295a7f4
+  original:
+    hackage: hip-1.5.6.0
+- completed:
+    hackage: repa-3.4.1.4@sha256:5a99bde69fe96a18d70aae23f47c8f719b1134558dca3ee5a7c15423b68a132e,3323
+    pantry-tree:
+      size: 2965
+      sha256: 060bec03e51bb6f40acc52c70f8e36804e18f80590b09dc8141352f1b14b03e7
+  original:
+    hackage: repa-3.4.1.4
+- completed:
+    hackage: Chart-diagrams-1.9.3@sha256:1535d5d0d3febca63138cecfde234315212611c21bb7f4358b2dae8c55c59003,1801
+    pantry-tree:
+      size: 934
+      sha256: 21558b4300fb173ae47c492d600c836e8a3b744a98372aeb5a5e5d40dd1dee2d
+  original:
+    hackage: Chart-diagrams-1.9.3
+- completed:
+    hackage: SVGFonts-1.7.0.1@sha256:af422f17a3a87f2d7185ba7ea4b1cf693f71c164e99ce7386f1902145db25df0,3909
+    pantry-tree:
+      size: 1836
+      sha256: 13f2c1b8ad72eefc1adb87229a2ccdc11be680dafe2fd7c65d52d751dcf885c8
+  original:
+    hackage: SVGFonts-1.7.0.1
 snapshots:
 - completed:
-    size: 565266
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/17/5.yaml
-    sha256: 78e8ebabf11406261abbc95b44f240acf71802630b368888f6d758de7fc3a2f7
-  original:
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/17/5.yaml
+    size: 534126
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/16/31.yaml
+    sha256: 637fb77049b25560622a224845b7acfe81a09fdb6a96a3c75997a10b651667f6
+  original: lts-16.31
