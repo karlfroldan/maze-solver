@@ -1,12 +1,13 @@
 module MazeToGraph 
     ( buildGraph
-    , newGraph
     , sampleGraph
     , makeVertices
     , endPoint
+    , makeEdges
     ) where
 
 import qualified Algebra.Graph as G
+import Data.List ( transpose )
 
 sampleGraph :: [String]
 sampleGraph = ["111111", "001001", "101101", "100101", "110001", "111101"]
@@ -33,6 +34,19 @@ makeVertices counter (list:lists) =
                 then 0 : makeVertices' c xs 
                 else apply counter c x : makeVertices' (c + 1) xs
 
+-- A function that builds edges by scanning adjacent 
+-- passable tiles in the matrix
+makeEdges :: [[Int]] -> [(Int, Int)]
+makeEdges xs = horizontalEdges ++ verticalEdges
+    where findEdges [x]      = []
+          findEdges (x:y:xs) = 
+              if x /= 0 && y /= 0
+              then (x,y):findEdges (y:xs)
+              else findEdges (y:xs)
+          -- find adjacent horizontal tiles in the matrix
+          horizontalEdges = concatMap findEdges xs 
+          -- find adjacent vertical tiles in the matrix
+          verticalEdges   = concatMap findEdges (transpose xs)
 -- The startpoint of any graph is always 1
 startPoint :: Int 
 startPoint = 1
@@ -40,9 +54,6 @@ startPoint = 1
 endPoint :: [[Int]] -> Int 
 endPoint vertices = maximum $ concat vertices
 
--- A new empty graph
-newGraph :: G.Graph a
-newGraph = G.empty 
-
-buildGraph :: G.Graph Int -> [Int] -> G.Graph Int
-buildGraph g edges = newGraph
+-- Build the graph that will represent the maze
+buildGraph :: [String] -> G.Graph Int 
+buildGraph xs = G.edges $ makeEdges $ makeVertices 0 xs

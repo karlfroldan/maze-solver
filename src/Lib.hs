@@ -1,13 +1,13 @@
 module Lib
     ( someFunc
-    , buildGraph
-    , newGraph 
+    , buildGraph 
     , sampleGraph
     , makeVertices 
     , endPoint
+    , makeEdges
     ) where
 
-import MazeToGraph ( buildGraph, newGraph, sampleGraph, makeVertices, endPoint )
+import MazeToGraph
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
