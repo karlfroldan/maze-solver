@@ -4,6 +4,8 @@ import Lib
 
 import Control.Monad (forM_)
 
+import System.IO
+
 import qualified Graphics.UI.Threepenny         as UI
 import Graphics.UI.Threepenny.Core ( Window, UI, (#), (#+), defaultConfig )
 import qualified Graphics.UI.Threepenny.Core    as UICore 
