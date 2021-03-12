@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4806a3c1c956869a5d24526faead92fe3f3b724a469653669afb3449a583e1b1
+-- hash: d515225b851a82018038653f02308d749ce2c3490adc1c9aa9c313f78dc70490
 
 name:           maze-solver
 version:        0.1.0.0
@@ -37,7 +37,6 @@ library
   build-depends:
       algebraic-graphs >0.3 && <=0.5
     , base >=4.7 && <5
-    , hip >=1.5.0.0 && <=1.6.0.0
     , parallel >3.0.0.0 && <=3.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0
   default-language: Haskell2010
@@ -52,7 +51,6 @@ executable maze-solver
   build-depends:
       algebraic-graphs >0.3 && <=0.5
     , base >=4.7 && <5
-    , hip >=1.5.0.0 && <=1.6.0.0
     , maze-solver
     , parallel >3.0.0.0 && <=3.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0
@@ -69,7 +67,6 @@ test-suite maze-solver-test
   build-depends:
       algebraic-graphs >0.3 && <=0.5
     , base >=4.7 && <5
-    , hip >=1.5.0.0 && <=1.6.0.0
     , maze-solver
     , parallel >3.0.0.0 && <=3.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0

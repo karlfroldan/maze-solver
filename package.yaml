@@ -24,7 +24,6 @@ dependencies:
 - algebraic-graphs > 0.3 && <= 0.5
 - parallel > 3.0.0.0 && <= 3.5.0.0
 - threepenny-gui >= 0.5.0.0 && <= 1.0.0.0
-- hip >= 1.5.0.0 && <= 1.6.0.0
 
 library:
   source-dirs: src
