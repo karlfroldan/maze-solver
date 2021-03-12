@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6ee25881e731e65d2e9d992d39fb5782f8e54301aff01c81568c1a536a6f3c12
+-- hash: 4806a3c1c956869a5d24526faead92fe3f3b724a469653669afb3449a583e1b1
 
 name:           maze-solver
 version:        0.1.0.0
@@ -29,6 +29,7 @@ library
   exposed-modules:
       Lib
       MazeToGraph
+      MyPrelude
   other-modules:
       Paths_maze_solver
   hs-source-dirs:

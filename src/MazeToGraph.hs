@@ -19,7 +19,7 @@ makeVertices counter (list:lists) =
     makeVertices' 1 list : makeVertices (counter + numZero) lists
     where 
         -- We count how many zeroes are in the maze
-        -- The zeroes are actually the passable parts of the maze
+        -- The zeroes are actually the passable tiles of the maze
         numZero = length $ filter (=='0') list
         apply n m i = if i == '1' then 0 else n + m
         -- Here, makeVertices' is a function that flips and
@@ -34,19 +34,20 @@ makeVertices counter (list:lists) =
                 then 0 : makeVertices' c xs 
                 else apply counter c x : makeVertices' (c + 1) xs
 
--- A function that builds edges by scanning adjacent 
--- passable tiles in the matrix
 makeEdges :: [[Int]] -> [(Int, Int)]
 makeEdges xs = horizontalEdges ++ verticalEdges
-    where findEdges [x]      = []
-          findEdges (x:y:xs) = 
-              if x /= 0 && y /= 0
-              then (x,y):findEdges (y:xs)
-              else findEdges (y:xs)
-          -- find adjacent horizontal tiles in the matrix
-          horizontalEdges = concatMap findEdges xs 
-          -- find adjacent vertical tiles in the matrix
-          verticalEdges   = concatMap findEdges (transpose xs)
+    where 
+        findEdges [x]      = []
+        -- x and y should both not be zero as that is not a passable
+        -- tile in the graph
+        findEdges (x:y:xs)
+            | 0 `notElem` [x, y] = (x, y) : findEdges (y:xs)
+            | otherwise          = findEdges (y:xs)
+        -- find adjacent horizontal tiles in the matrix
+        horizontalEdges = concatMap findEdges xs 
+        -- find adjacent vertical tiles in the matrix
+        verticalEdges   = concatMap findEdges (transpose xs)
+
 -- The startpoint of any graph is always 1
 startPoint :: Int 
 startPoint = 1
