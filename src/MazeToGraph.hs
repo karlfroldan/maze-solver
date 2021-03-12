@@ -21,7 +21,9 @@ makeVertices counter (list:lists) =
         -- We count how many zeroes are in the maze
         -- The zeroes are actually the passable tiles of the maze
         numZero = length $ filter (=='0') list
-        apply n m i = if i == '1' then 0 else n + m
+        apply n m i -- = if i == '1' then 0 else n + m
+            | i == '1'  = 0
+            | otherwise = n + m
         -- Here, makeVertices' is a function that flips and
         -- actually gives names to the vertex.
         -- It sets all unpassable parts of the maze to 0 and 
@@ -29,10 +31,8 @@ makeVertices counter (list:lists) =
         -- The start part of the maze is always tile 1.
         -- We assume that there is always a path from start to end
         makeVertices' _ []     = []
-        makeVertices' c (x:xs) = 
-                if apply counter c x == 0
-                then 0 : makeVertices' c xs 
-                else apply counter c x : makeVertices' (c + 1) xs
+        makeVertices' c (x:xs) = let applyC = apply counter c x 
+                                 in  applyC : makeVertices' (c + hold applyC) xs
 
 makeEdges :: [[Int]] -> [(Int, Int)]
 makeEdges xs = horizontalEdges ++ verticalEdges
@@ -58,3 +58,8 @@ endPoint vertices = maximum $ concat vertices
 -- Build the graph that will represent the maze
 buildGraph :: [String] -> G.Graph Int 
 buildGraph xs = G.edges $ makeEdges $ makeVertices 0 xs
+
+hold :: Int -> Int 
+hold x
+    | x == 0    = 0
+    | otherwise = 1
