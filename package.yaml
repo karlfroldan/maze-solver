@@ -21,9 +21,10 @@ description:         Please see the README on GitHub at <https://github.com/karl
 
 dependencies:
 - base >= 4.7 && < 5
-- algebraic-graphs > 0.3 && <= 0.5
+- containers >= 0.5 && <= 0.7
 - parallel > 3.0.0.0 && <= 3.5.0.0
 - threepenny-gui >= 0.5.0.0 && <= 1.0.0.0
+- fgl >= 5.7.0.0 && <= 6.0.0.0
 
 library:
   source-dirs: src

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 89fd6ee28328c1981e6257a125123e343c65fc065cbee34d11930e1e5dce2743
+-- hash: ce2f5e7abceab85890c054e9bc9b1234704ebea8653f9ad08767b62e7fcf784e
 
 name:           maze-solver
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      AStar
       Lib
       MazeToGraph
   other-modules:
@@ -34,8 +35,9 @@ library
   hs-source-dirs:
       src
   build-depends:
-      algebraic-graphs >0.3 && <=0.5
-    , base >=4.7 && <5
+      base >=4.7 && <5
+    , containers >=0.5 && <=0.7
+    , fgl >=5.7.0.0 && <=6.0.0.0
     , parallel >3.0.0.0 && <=3.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0
   default-language: Haskell2010
@@ -48,8 +50,9 @@ executable maze-solver
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      algebraic-graphs >0.3 && <=0.5
-    , base >=4.7 && <5
+      base >=4.7 && <5
+    , containers >=0.5 && <=0.7
+    , fgl >=5.7.0.0 && <=6.0.0.0
     , maze-solver
     , parallel >3.0.0.0 && <=3.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0
@@ -64,8 +67,9 @@ test-suite maze-solver-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      algebraic-graphs >0.3 && <=0.5
-    , base >=4.7 && <5
+      base >=4.7 && <5
+    , containers >=0.5 && <=0.7
+    , fgl >=5.7.0.0 && <=6.0.0.0
     , maze-solver
     , parallel >3.0.0.0 && <=3.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0
