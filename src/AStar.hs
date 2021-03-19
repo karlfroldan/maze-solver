@@ -1,73 +1,65 @@
-module AStar (
+module AStar ( bfs, bfs', newPq, cameFromTable ) where
 
-) where 
+import Data.Hashable ( Hashable )
+import qualified Data.HashSet as Set
+import qualified Data.HashMap.Strict as Map
+import qualified Data.PQueue.Min as PQ
+import Data.Maybe ( fromMaybe )
 
-import Data.List ( sortBy, intersect )
-import Data.Function (on)
+import MazeToGraph ( Graph
+                   , Neighbors, neighbors
+                   )
 
-import Data.Graph.Inductive
-import Data.Graph.Inductive.PatriciaTree ( Gr )
+bfs :: Graph -> Int -> Map.HashMap Int (Maybe Int)
+bfs g start = bfs' g (PQ.singleton start) (Map.singleton start Nothing) start
 
-import MazeToGraph
-
-type ListPairs a = ([LNode a], [LNode a])
-type StartEnd  a = (LNode a, LNode a)
-
--- I'm using filters a lot. Let me declare a shorthand
-(@==) :: (a -> Bool) -> [a] -> [a]
-f @== xs = filter f xs
--- Initially keep f at 0
--- f :: LNode a -> (LNode a, Int)
--- f n = (n, 0)
-astar' :: Gr (Int, Int) Int -> ListPairs (Int, Int) -> StartEnd (Int, Int) -> [LNode (Int, Int)]
--- We can assume that the algorithm is terminating
--- We simply return the openset when it's empty
-astar' g ([], closedset) _ = closedset
-astar' g sets endpoints    = []
-    --if goalInList goal leastNodeNeighbours
-    --then leastNodeF:closedset
-    --else
+bfs' :: Graph                       -- The graph to traverse
+     -> PQ.MinQueue Int             -- The priorty queue
+     -> Map.HashMap Int (Maybe Int) -- A hashmap to store which node we came from
+     -> Int                         -- The start node
+     -> Map.HashMap Int (Maybe Int)
+bfs' g pq map start 
+    | PQ.null pq = map
+    | otherwise  = bfs' g pq'' cameFrom start
     where
-        (openset, closedset) = sets
-        closedSetNodes       = fst <$> closedset
-        (start, goal)        = endpoints
-        -- Calculate all the fs in the openset
-        -- and get the minimum value of f
-        -- we separate the node from its position or label
-        (leastNode, fValue)  = minSnd $ f <$> openset
-        (fNode, fLabel)      = leastNode
-        -- This is the open set after removing the node with the least f
-        openset'             = (/= leastNode) @== openset
-        -- get the neighbors of the leastNodeF
-        lnn                  = neighbors g fNode
-        leastNodeNeighbours  = (`notElem` closedSetNodes) @== lnn
-        f                    = g + h fLabel goalPos
-        goalPos              = snd goal
-        
--- 
-astar :: Gr (Int, Int) Int -> StartEnd (Int, Int) -> [LNode (Int, Int)]
-astar g endpoints = astar' g ([start], []) endpoints
-    where 
-        (start, _) = endpoints 
+        -- We pop the current node from the priority queue
+        (current, pq') = PQ.deleteFindMin pq
+        -- We get the neighbors of the current node
+        currentN            = neighbors current g
+        -- Node list of G
+        nodeList            = Map.keysSet g
+        pq''                = newPq pq' currentN map
+        cameFrom            = cameFromTable current map currentN
 
+newPq :: Ord k => PQ.MinQueue k -> Set.HashSet k -> Map.HashMap k a -> PQ.MinQueue k
+-- n being the neighbors of the current in G
+newPq oldPq n table = Set.foldl' place oldPq n
+    where place acc x   
+            | x `elem` keyset = acc 
+            | otherwise       = PQ.insert x acc
+          keyset = Map.keysSet table
 
-minSnd :: (Ord b) => [(a, b)] -> (a, b)
-minSnd ((x,y):xs) = foldl cmp (x, y) xs
-    where cmp (a, b) (x, y) = if b <= y 
-                              then (a, b)
-                              else (x, y)
+cameFromTable :: (Eq k, Hashable k) => a -> Map.HashMap k (Maybe a) -> Set.HashSet k -> Map.HashMap k (Maybe a)
+-- c being the current value 
+-- n being the neighbors of c in graph G
+cameFromTable c oldMap n = Set.foldl' place oldMap n 
+    where place acc x 
+            | Set.member x keys = acc 
+            | otherwise         = Map.insert x (Just c) acc
+          keys = Map.keysSet oldMap
 
-minFst :: (Ord a) => [(a, b)] -> (a, b)
-minFst ((x, y):xs) = foldl cmp (x, y) xs 
-    where cmp (a, b) (x, y) = if a <= x 
-                              then (a, b)
-                              else (x, y)
+-- search :: Graph 
+--        -> Set.HashSet Int -- Open set
+--        -> Set.HashSet Int -- Closed set
+--        -> Int             -- cost 
+--        -> 
 
-maxFst :: (Ord a) => [(a, b)] -> (a, b)
-maxFst ((x, y):xs) = foldl cmp (x, y) xs 
-    where cmp (a, b) (x, y) = if a <= x 
-                              then (x, y)
-                              else (a, b)
+-- astar :: Graph          -- The graph to be traversed
+--       -> Int            -- The start node
+--       -> Int            -- The end node
+--       -> (Int -> Int)   -- The heuristic function
+--       -> (Int, [Int])   -- (Cost of the path, Path)
+-- astar g start end f =
 
 -- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 -- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -75,19 +67,9 @@ maxFst ((x, y):xs) = foldl cmp (x, y) xs
 -- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 -- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-goalInList :: (Foldable t, Eq a) => a -> t a -> Bool
-goalInList goal xs = goal `elem` xs 
-
 -- We are only having 4 directions so we use Manhattan
-manhattan :: (Int, Int) -> (Int, Int) -> Int 
-manhattan current@(x1, y1) goal@(x2, y2) = abs (x1 - x2) + abs (y1 - y2)
+-- manhattan :: (Int, Int) -> (Int, Int) -> Int 
+-- manhattan (x1, y1) (x2, y2) = abs (x1 - x2) + abs (y1 - y2)
 
--- This is our heuristics function
-h :: (Int, Int) -> (Int, Int) -> Int
-h = manhattan
-
-g :: [LNode a] -> Int 
-g = length
-
-
-
+-- getCoords :: Gr (Int, Int) Int -> [Node] -> [LNode (Int, Int)]
+-- getCoords g xs = (\v -> (v, (fromMaybe (0, 0) . lab g) v)) <$> xs

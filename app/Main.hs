@@ -15,7 +15,6 @@ import qualified Graphics.UI.Threepenny.Elements as E
 import Foreign.JavaScript ( Server, loadFile, MimeType, URI )
 import qualified Foreign.JavaScript as FFIJS
 
-
 canvasX :: Int
 canvasX = 800
 canvasY :: Int
@@ -32,15 +31,26 @@ goalTile = [("border", "solid white 1px"), ("background", "red"), ("padding", "0
 waypointTile :: [(String, String)]
 waypointTile = [("border", "solid white 1px"), ("background", "cyan"), ("padding", "0px"), ("margin", "0px")]
 
+
 main :: IO ()
 main = do
-    let maze = makeVertices 0 sampleGraph
-        mazeDim = length sampleGraph
-        canvasDim = mazeDim * 50
-    UICore.startGUI defaultConfig (setupGUI canvasDim maze)
+    let maze       = makeVertices 0 sampleGraph
+        g          = buildGraph sampleGraph
+        mazeDim    = length sampleGraph
+        canvasDim  = mazeDim * 50
+        path       = init $ tail $ processPath 1 (endPoint maze) $ bfs g 1
+        maze'      = filterPath maze path
+    
+    UICore.startGUI defaultConfig (setupGUI maze')
 
-setupGUI :: Int -> [[Int]] -> Window -> UI ()
-setupGUI canvasDim maze window = do
+filterPath maze path = fmap (fmap f) maze
+    where ep = endPoint maze
+          f x 
+            | x `elem` path = -1
+            | otherwise     = x
+
+setupGUI :: [[Int]] -> Window -> UI ()
+setupGUI maze window = do
     return window # set UICore.title "Maze solver"
     UICore.getBody window # set UI.style [("width", "100%")]
     let cells = mkCells maze
@@ -59,7 +69,7 @@ setupGUI canvasDim maze window = do
     return ()
 
 -- Make cells create a maze with dimensions of 800x800
-mkCells :: [[Int]] -> [[UI UI.Element]]
+mkCells :: [[Int]] -> [[UI UICore.Element]]
 mkCells maze =
     fmap (fmap (\cell ->
         UI.td # set UI.width dims
@@ -71,8 +81,8 @@ mkCells maze =
 
 defineStyle :: [[Int]] -> Int -> [(String, String)]
 defineStyle maze n
-    | n == 0             = nonPassableTile
-    | n == 1             = startTile
-    | n == endPoint maze = goalTile
-    | n == 2             = waypointTile
-    | otherwise          = passableTile
+    | n == 0                   = nonPassableTile
+    | n == 1                   = startTile
+    | n == (-1)                = waypointTile
+    | n == endPoint maze       = goalTile
+    | otherwise                = passableTile

@@ -1,16 +1,28 @@
 module Lib
-    ( someFunc
-    , buildGraph 
+    ( buildGraph 
     , sampleGraph
+    , neighbors
     , sampleGraph2 
     , makeVertices 
     , endPoint
     , makeEdges
-    , calculatePos 
+    , calculatePos
+    , bfs
+    , newPq
+    , cameFromTable
+    , processPath
     ) where
 
 import MazeToGraph
 import AStar
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+import Data.Maybe ( fromJust )
+
+import qualified Data.HashMap.Strict as Map
+
+processPath :: Int -> Int -> Map.HashMap Int (Maybe Int) -> [Int]
+processPath start end g
+    | start == end = [start]
+    | otherwise    = processPath start node g ++ [end]
+    where 
+        node = fromJust $ Map.lookupDefault (Just 0) end g

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ce2f5e7abceab85890c054e9bc9b1234704ebea8653f9ad08767b62e7fcf784e
+-- hash: 317ade2324a043c782b2436155eb9267c50f36bfc6fbaec4a6a9c74535061737
 
 name:           maze-solver
 version:        0.1.0.0
@@ -37,9 +37,12 @@ library
   build-depends:
       base >=4.7 && <5
     , containers >=0.5 && <=0.7
-    , fgl >=5.7.0.0 && <=6.0.0.0
+    , hashable >1.0.0.0 && <=3.0.0.0
+    , hashtables >1.2.0.0 && <=1.3.0.0
     , parallel >3.0.0.0 && <=3.5.0.0
+    , pqueue >1.0.0.0 && <=1.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0
+    , unordered-containers >1.0.0.0 && <=3.0.0.0
   default-language: Haskell2010
 
 executable maze-solver
@@ -52,10 +55,13 @@ executable maze-solver
   build-depends:
       base >=4.7 && <5
     , containers >=0.5 && <=0.7
-    , fgl >=5.7.0.0 && <=6.0.0.0
+    , hashable >1.0.0.0 && <=3.0.0.0
+    , hashtables >1.2.0.0 && <=1.3.0.0
     , maze-solver
     , parallel >3.0.0.0 && <=3.5.0.0
+    , pqueue >1.0.0.0 && <=1.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0
+    , unordered-containers >1.0.0.0 && <=3.0.0.0
   default-language: Haskell2010
 
 test-suite maze-solver-test
@@ -69,8 +75,11 @@ test-suite maze-solver-test
   build-depends:
       base >=4.7 && <5
     , containers >=0.5 && <=0.7
-    , fgl >=5.7.0.0 && <=6.0.0.0
+    , hashable >1.0.0.0 && <=3.0.0.0
+    , hashtables >1.2.0.0 && <=1.3.0.0
     , maze-solver
     , parallel >3.0.0.0 && <=3.5.0.0
+    , pqueue >1.0.0.0 && <=1.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0
+    , unordered-containers >1.0.0.0 && <=3.0.0.0
   default-language: Haskell2010

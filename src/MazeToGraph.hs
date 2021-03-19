@@ -1,23 +1,25 @@
 module MazeToGraph 
     ( buildGraph
     , sampleGraph
+    , startPoint
     , sampleGraph2
     , makeVertices
     , endPoint
     , makeEdges
     , calculatePos
+    , neighbors
+    , Neighbors
+    , Graph
     ) where
 
+import Data.Maybe ( fromMaybe )
+import qualified Data.HashSet as Set
+import Data.HashMap.Strict ( HashMap )
+import qualified Data.HashMap.Strict as Map
 import Data.List (transpose)
 
-import Data.Graph.Inductive.Graph ( Node
-                                  , Edge 
-                                  , LNode 
-                                  , LEdge 
-                                  , Graph
-                                  , mkGraph 
-                                  )
-import Data.Graph.Inductive.PatriciaTree ( Gr )
+type Graph = HashMap Int Neighbors
+type Neighbors = Set.HashSet Int
 
 -- We build the vertex names from the graph given
 makeVertices :: Int -> [String] -> [[Int]]
@@ -64,14 +66,10 @@ endPoint :: [[Int]] -> Int
 endPoint vertices = maximum $ concat vertices
 
 -- Build the graph that will represent the maze
-buildGraph :: [String] -> Gr (Int, Int) Int
-buildGraph edges = mkGraph gNodes gEdges 
-    where 
-        vertexList  = makeVertices 0 edges 
-        -- The label of the node is its position
-        gNodes      = (\x -> (x, xPos x))    <$> noZero (concat vertexList)
-        gEdges      = (\(x, y) -> (x, y, 1)) <$> makeEdges vertexList
-        xPos x      = calculatePos x vertexList
+buildGraph :: [String] -> Graph
+buildGraph g = foldl (\map (k, v) -> Map.adjust (Set.union (Set.fromList [v])) k map) buildMap edges
+    where edges = makeEdges (makeVertices 0 g)
+          buildMap = foldl (\map (e, _) -> Map.insert e Set.empty map) Map.empty edges
 
 calculatePos :: Int -> [[Int]] -> (Int, Int) 
 calculatePos n xs = (xPos, yPos)
@@ -86,6 +84,8 @@ calculatePos n xs = (xPos, yPos)
         yPos = listPos `div` dim 
         xPos = listPos `mod` dim
 
+neighbors :: Int -> Graph -> Neighbors
+neighbors k g = fromMaybe Set.empty $ Map.lookup k g
 
 hold :: Int -> Int 
 hold x
