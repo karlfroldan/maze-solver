@@ -13,6 +13,7 @@ module MazeToGraph
     ) where
 
 import Data.Maybe ( fromMaybe )
+import Data.Tuple ( swap )
 import qualified Data.HashSet as Set
 import Data.HashMap.Strict ( HashMap )
 import qualified Data.HashMap.Strict as Map
@@ -45,7 +46,7 @@ makeVertices counter (list:lists) =
         noWhitespace = filter (/= ' ')
 
 makeEdges :: [[Int]] -> [(Int, Int)]
-makeEdges xs = horizontalEdges ++ verticalEdges
+makeEdges xs = horizontalEdges ++ verticalEdges ++ invertedHor ++ invertedVert
     where 
         findEdges [x]      = []
         -- x and y should both not be zero as that is not a passable
@@ -57,6 +58,9 @@ makeEdges xs = horizontalEdges ++ verticalEdges
         horizontalEdges = concatMap findEdges xs 
         -- find adjacent vertical tiles in the matrix
         verticalEdges   = concatMap findEdges (transpose xs)
+        invertedHor     = swap <$> horizontalEdges
+        invertedVert    = swap <$> verticalEdges
+
 
 -- The startpoint of any graph is always 1
 startPoint ::  Int 

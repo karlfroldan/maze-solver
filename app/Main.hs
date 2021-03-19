@@ -3,6 +3,7 @@ module Main where
 import Lib
 
 import Control.Monad (forM_)
+import Data.List ( zipWith )
 
 import System.IO
 
@@ -34,14 +35,12 @@ waypointTile = [("border", "solid white 1px"), ("background", "cyan"), ("padding
 
 main :: IO ()
 main = do
-    let maze       = makeVertices 0 sampleGraph
-        g          = buildGraph sampleGraph
-        mazeDim    = length sampleGraph
-        canvasDim  = mazeDim * 50
+    let maze       = makeVertices 0 sampleGraph2
+        g          = buildGraph sampleGraph2
         path       = init $ tail $ processPath 1 (endPoint maze) $ bfs g 1
         maze'      = filterPath maze path
     
-    UICore.startGUI defaultConfig (setupGUI maze')
+    UICore.startGUI defaultConfig (setupGUI maze maze')
 
 filterPath maze path = fmap (fmap f) maze
     where ep = endPoint maze
@@ -49,11 +48,11 @@ filterPath maze path = fmap (fmap f) maze
             | x `elem` path = -1
             | otherwise     = x
 
-setupGUI :: [[Int]] -> Window -> UI ()
-setupGUI maze window = do
+setupGUI :: [[Int]] -> [[Int]] -> Window -> UI ()
+setupGUI maze maze' window = do
     return window # set UICore.title "Maze solver"
     UICore.getBody window # set UI.style [("width", "100%")]
-    let cells = mkCells maze
+    let cells = mkCells maze maze'
         rows  = fmap (UI.tr #+) cells
         table = UI.table # set UI.style [("align", "center")] #+ rows 
 
@@ -69,15 +68,18 @@ setupGUI maze window = do
     return ()
 
 -- Make cells create a maze with dimensions of 800x800
-mkCells :: [[Int]] -> [[UI UICore.Element]]
-mkCells maze =
-    fmap (fmap (\cell ->
-        UI.td # set UI.width dims
-              # set UI.height dims
-              # set UI.style (defineStyle maze cell))) maze
+mkCells :: [[Int]] -> [[Int]] -> [[UI UICore.Element]]
+mkCells maze maze' =
+    fmap (fmap (\(namedCell, cell) -> 
+        UI.td # set UI.width dims 
+              # set UI.height dims 
+              # set UI.style (defineStyle maze' cell)
+              #+ [cellName namedCell])) zipped
     where 
-        mazeDim = length maze 
-        dims    = 600 `div` mazeDim
+        zipped         = zipWith zip maze maze'
+        mazeDim        = length maze' 
+        dims           = 600 `div` mazeDim
+        cellName cellN = UI.string (show cellN)
 
 defineStyle :: [[Int]] -> Int -> [(String, String)]
 defineStyle maze n

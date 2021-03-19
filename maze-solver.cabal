@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 317ade2324a043c782b2436155eb9267c50f36bfc6fbaec4a6a9c74535061737
+-- hash: 449af7f3edf8412e257cb096d01a85417d181e21f42ca0bccb9667b113ceae4e
 
 name:           maze-solver
 version:        0.1.0.0
@@ -42,7 +42,7 @@ library
     , parallel >3.0.0.0 && <=3.5.0.0
     , pqueue >1.0.0.0 && <=1.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0
-    , unordered-containers >1.0.0.0 && <=3.0.0.0
+    , unordered-containers >0.2.0.0 && <=0.3.0.0
   default-language: Haskell2010
 
 executable maze-solver
@@ -61,7 +61,7 @@ executable maze-solver
     , parallel >3.0.0.0 && <=3.5.0.0
     , pqueue >1.0.0.0 && <=1.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0
-    , unordered-containers >1.0.0.0 && <=3.0.0.0
+    , unordered-containers >0.2.0.0 && <=0.3.0.0
   default-language: Haskell2010
 
 test-suite maze-solver-test
@@ -81,5 +81,5 @@ test-suite maze-solver-test
     , parallel >3.0.0.0 && <=3.5.0.0
     , pqueue >1.0.0.0 && <=1.5.0.0
     , threepenny-gui >=0.5.0.0 && <=1.0.0.0
-    , unordered-containers >1.0.0.0 && <=3.0.0.0
+    , unordered-containers >0.2.0.0 && <=0.3.0.0
   default-language: Haskell2010
