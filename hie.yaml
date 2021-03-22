@@ -1,0 +1,13 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "maze-solver:lib"
+
+    - path: "./app/Main.hs"
+      component: "maze-solver:exe:maze-solver"
+
+    - path: "./app/Paths_maze_solver.hs"
+      component: "maze-solver:exe:maze-solver"
+
+    - path: "./test"
+      component: "maze-solver:test:maze-solver-test"

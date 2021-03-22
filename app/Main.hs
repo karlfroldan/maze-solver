@@ -37,9 +37,9 @@ main :: IO ()
 main = do
     let maze       = makeVertices 0 sampleGraph2
         g          = buildGraph sampleGraph2
-        path       = init $ tail $ processPath 1 (endPoint maze) $ bfs g 1
+        (sp, ep)   = (startPoint maze, endPoint maze)
+        path       = init $ tail $ processPath sp ep $ bfs g sp ep
         maze'      = filterPath maze path
-    
     UICore.startGUI defaultConfig (setupGUI maze maze')
 
 filterPath maze path = fmap (fmap f) maze

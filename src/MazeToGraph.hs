@@ -62,12 +62,12 @@ makeEdges xs = horizontalEdges ++ verticalEdges ++ invertedHor ++ invertedVert
         invertedVert    = swap <$> verticalEdges
 
 
--- The startpoint of any graph is always 1
-startPoint ::  Int 
-startPoint = 1
+-- The startpoint of any graph is always the minimum vertex
+startPoint :: [[Int]] -> Int 
+startPoint vs = minimum $ filter (> 0) (concat vs)
 -- The end point of any graph is always the largest integer
 endPoint :: [[Int]] -> Int 
-endPoint vertices = maximum $ concat vertices
+endPoint vs = maximum $ concat vs
 
 -- Build the graph that will represent the maze
 buildGraph :: [String] -> Graph
@@ -109,12 +109,12 @@ sampleGraph = [ "1 1 1 1 1 1"
 
 sampleGraph2 :: [String]
 sampleGraph2 = [ "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"
-               , "0 0 0 0 1 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 1"
+               , "0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 1"
                , "1 0 1 0 1 0 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 0 1"
                , "1 0 1 0 1 0 1 0 0 0 1 0 1 0 0 0 1 0 1 0 0 0 0 0 1"
                , "1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0 1 0 1 1 1 1 1"
                , "1 0 0 0 1 0 1 0 1 0 0 0 1 0 1 0 0 0 1 0 1 0 0 0 1"
-               , "1 0 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 1 1 0 1 1 1 0 1"
+               , "1 0 1 0 1 0 1 0 1 1 1 1 1 0 1 0 1 1 1 0 1 1 1 0 1"
                , "1 0 0 0 1 0 1 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 1 0 1"
                , "1 0 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 0 1 1 1 0 1 0 1"
                , "1 0 1 0 1 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 1 0 1 0 1"
@@ -123,14 +123,14 @@ sampleGraph2 = [ "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"
                , "1 0 1 0 1 0 1 1 1 0 1 0 1 1 1 0 1 0 1 0 1 1 1 0 1"
                , "1 0 1 0 1 0 1 0 0 0 1 0 0 0 1 0 1 0 1 0 1 0 0 0 1"
                , "1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1"
-               , "1 0 0 0 1 0 0 0 0 0 0 0 1 0 1 0 1 0 1 0 1 0 0 0 1"
+               , "1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 1 0 0 0 1"
                , "1 0 1 1 1 1 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1"
                , "1 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 1 0 0 0 1 0 1"
-               , "1 0 1 0 1 0 1 1 1 1 1 1 1 0 1 1 1 1 1 0 1 1 1 0 1"
-               , "1 0 0 0 1 0 0 0 0 0 0 0 1 0 1 0 0 0 1 0 0 0 1 0 1"
-               , "1 0 1 1 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 0 1"
+               , "1 0 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 0 0 0 1 1 1 0 1"
+               , "1 0 0 0 1 0 0 0 0 0 0 0 1 0 1 0 0 0 1 0 0 0 0 0 1"
+               , "1 0 1 1 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 0 1 0 1"
                , "1 0 0 0 0 0 0 0 1 0 1 0 1 0 1 0 1 0 1 0 0 0 0 0 1"
-               , "1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0 1"
+               , "1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1"
                , "1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 1 0 0 0 1"
                , "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1"
                ]

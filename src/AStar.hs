@@ -10,17 +10,18 @@ import MazeToGraph ( Graph
                    , Neighbors, neighbors
                    )
 
-bfs :: Graph -> Int -> Map.HashMap Int (Maybe Int)
+bfs :: Graph -> Int -> Int -> Map.HashMap Int (Maybe Int)
 bfs g start = bfs' g (PQ.singleton start) (Map.singleton start Nothing) start
 
 bfs' :: Graph                       -- The graph to traverse
      -> PQ.MinQueue Int             -- The priorty queue
      -> Map.HashMap Int (Maybe Int) -- A hashmap to store which node we came from
      -> Int                         -- The start node
+     -> Int                         -- The goal node
      -> Map.HashMap Int (Maybe Int)
-bfs' g pq map start 
-    | PQ.null pq = map
-    | otherwise  = bfs' g pq'' cameFrom start
+bfs' g pq map start goal
+    | PQ.null pq || current == goal = map
+    | otherwise  = bfs' g pq'' cameFrom start goal
     where
         -- We pop the current node from the priority queue
         (current, pq') = PQ.deleteFindMin pq
